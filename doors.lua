@@ -3,8 +3,8 @@ local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/kiti
 local Window = Rayfield:CreateWindow({
    Name = "Gui Roblox Scripts",
    Icon = 0, -- Icon in Topbar. Can use Lucide Icons (string) or Roblox Image (number). 0 to use no icon (default).
-   LoadingTitle = "Rayfield Interface Suite",
-   LoadingSubtitle = "by Sirius",
+   LoadingTitle = "Gui Roblox Scripts",
+   LoadingSubtitle = "by Rfonte",
    Theme = "Default", -- Check https://docs.sirius.menu/rayfield/configuration/themes
 
    DisableRayfieldPrompts = false,
@@ -42,6 +42,50 @@ local Button = Tab:CreateButton({
    Name = "Batatinha frita 1.. 2.. 3... by Rhyan57",
    Callback = function()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Sc-Rhyan57/MsProject/refs/heads/main/projects/greenLight-RedLight-doors-by-rhyan.lua"))()
+   end,
+})
+local Button = Tab:CreateButton({
+   Name = "Permitir pulo",
+   Callback = function()
+local Players = game:GetService("Players")
+local UserInputService = game:GetService("UserInputService")
+local player = Players.LocalPlayer
+
+-- Configuração do impulso para o pulo
+local JUMP_FORCE = 50  -- Ajuste o valor para definir a força do pulo
+local debounce = false -- Previne múltiplos pulos simultâneos
+
+-- Função para realizar o pulo
+local function performJump()
+    if debounce then return end
+    debounce = true
+
+    local character = player.Character or player.CharacterAdded:Wait()
+    local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
+    local humanoid = character:FindFirstChild("Humanoid")
+
+    if humanoid and humanoidRootPart then
+        -- Aplica uma força para simular o pulo
+        humanoidRootPart.Velocity = Vector3.new(
+            humanoidRootPart.Velocity.X,
+            JUMP_FORCE,
+            humanoidRootPart.Velocity.Z
+        )
+    end
+
+    -- Delay para evitar spam de pulo
+    task.wait(0.5) -- Tempo de recarga para o próximo pulo
+    debounce = false
+end
+
+-- Detecta quando a barra de espaço é pressionada
+UserInputService.InputBegan:Connect(function(input, gameProcessed)
+    if gameProcessed then return end -- Ignora se o input já foi processado pelo jogo
+    if input.KeyCode == Enum.KeyCode.Space then
+        performJump()
+    end
+end)
+
    end,
 })
 
