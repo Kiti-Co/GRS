@@ -52,7 +52,7 @@ local UserInputService = game:GetService("UserInputService")
 local player = Players.LocalPlayer
 
 -- Configuração do impulso para o pulo
-local JUMP_FORCE = 50  -- Ajuste o valor para definir a força do pulo
+local JUMP_FORCE = 25  -- Ajuste o valor para definir a força do pulo (mais baixo)
 local debounce = false -- Previne múltiplos pulos simultâneos
 
 -- Função para realizar o pulo
