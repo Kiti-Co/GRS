@@ -36,7 +36,7 @@ local Window = Rayfield:CreateWindow({
    }
 })
 
-local Tab = Window:CreateTab("Mini-games", 4483362458) -- Title, Image
+local Tab = Window:CreateTab("Doors", 4483362458) -- Title, Image
 
 local Section = Tab:CreateSection("Sessão")
 
