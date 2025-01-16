@@ -1,219 +1,159 @@
 -- Services
 local Players = game:GetService("Players")
 
--- Constants for styling
+-- Constants
 local COLORS = {
     BACKGROUND = Color3.fromRGB(35, 35, 35),
     HEADER = Color3.fromRGB(45, 45, 45),
     ITEM = Color3.fromRGB(50, 50, 50),
-    ITEM_HOVER = Color3.fromRGB(60, 60, 60),
-    TEXT = Color3.fromRGB(255, 255, 255),
-    PROPERTY = Color3.fromRGB(200, 200, 200),
-    STRING = Color3.fromRGB(150, 255, 150),
-    NUMBER = Color3.fromRGB(150, 150, 255),
-    BOOL = Color3.fromRGB(255, 150, 150)
+    TEXT = Color3.fromRGB(255, 255, 255)
 }
 
-local function CreateStyledButton(text, size, position)
-    local button = Instance.new("TextButton")
-    button.Size = size
-    button.Position = position
-    button.BackgroundColor3 = COLORS.ITEM
-    button.Text = text
-    button.TextColor3 = COLORS.TEXT
-    button.TextXAlignment = Enum.TextXAlignment.Left
-    button.AutoButtonColor = true
-    button.Font = Enum.Font.SourceSans
-    button.TextSize = 14
-    
-    -- Hover effect
-    button.MouseEnter:Connect(function()
-        button.BackgroundColor3 = COLORS.ITEM_HOVER
-    end)
-    
-    button.MouseLeave:Connect(function()
-        button.BackgroundColor3 = COLORS.ITEM
-    end)
-    
-    return button
-end
-
-local function CreatePropertyViewer()
-    local viewer = Instance.new("Frame")
-    viewer.Name = "PropertyViewer"
-    viewer.Size = UDim2.new(0.3, 0, 1, 0)
-    viewer.Position = UDim2.new(0.7, 0, 0, 0)
-    viewer.BackgroundColor3 = COLORS.BACKGROUND
-    
-    local title = Instance.new("TextLabel")
-    title.Size = UDim2.new(1, 0, 0, 30)
-    title.BackgroundColor3 = COLORS.HEADER
-    title.Text = "Properties"
-    title.TextColor3 = COLORS.TEXT
-    title.Parent = viewer
-    
-    local scroll = Instance.new("ScrollingFrame")
-    scroll.Size = UDim2.new(1, 0, 1, -30)
-    scroll.Position = UDim2.new(0, 0, 0, 30)
-    scroll.BackgroundColor3 = COLORS.BACKGROUND
-    scroll.ScrollBarThickness = 8
-    scroll.Parent = viewer
-    
-    return viewer, scroll
-end
-
-local function DisplayProperties(instance, propertyList)
-    propertyList:ClearAllChildren()
-    local yOffset = 5
-    
-    -- Function to add a property row
-    local function AddProperty(name, value, propertyType)
-        local container = Instance.new("Frame")
-        container.Size = UDim2.new(1, -10, 0, 25)
-        container.Position = UDim2.new(0, 5, 0, yOffset)
-        container.BackgroundTransparency = 1
-        container.Parent = propertyList
-        
-        local nameLabel = Instance.new("TextLabel")
-        nameLabel.Size = UDim2.new(0.4, 0, 1, 0)
-        nameLabel.BackgroundTransparency = 1
-        nameLabel.Text = name
-        nameLabel.TextColor3 = COLORS.PROPERTY
-        nameLabel.TextXAlignment = Enum.TextXAlignment.Left
-        nameLabel.Parent = container
-        
-        local valueLabel = Instance.new("TextLabel")
-        valueLabel.Size = UDim2.new(0.6, 0, 1, 0)
-        valueLabel.Position = UDim2.new(0.4, 0, 0, 0)
-        valueLabel.BackgroundTransparency = 1
-        valueLabel.Text = tostring(value)
-        valueLabel.TextColor3 = COLORS[propertyType]
-        valueLabel.TextXAlignment = Enum.TextXAlignment.Left
-        valueLabel.Parent = container
-        
-        yOffset = yOffset + 30
-    end
-    
-    -- Try to get common properties
-    local properties = {
-        {"Name", instance.Name, "STRING"},
-        {"ClassName", instance.ClassName, "STRING"},
-        {"Parent", instance.Parent and instance.Parent.Name or "nil", "STRING"}
-    }
-    
-    -- Try to get position/size for relevant instances
-    if instance:IsA("BasePart") or instance:IsA("GuiObject") then
-        if instance:IsA("BasePart") then
-            properties[#properties + 1] = {"Position", instance.Position, "NUMBER"}
-            properties[#properties + 1] = {"Size", instance.Size, "NUMBER"}
-        else
-            properties[#properties + 1] = {"Position", instance.Position, "NUMBER"}
-            properties[#properties + 1] = {"Size", instance.Size, "NUMBER"}
-        end
-    end
-    
-    -- Add all properties
-    for _, prop in ipairs(properties) do
-        AddProperty(prop[1], prop[2], prop[3])
-    end
-    
-    propertyList.CanvasSize = UDim2.new(0, 0, 0, yOffset)
-end
+-- Configurações de Performance
+local MAX_ITEMS_PER_FRAME = 50  -- Limite de itens por frame
+local LOAD_DELAY = 0.03        -- Delay entre carregamentos
 
 local function CreateExplorer()
     local gui = Instance.new("ScreenGui")
-    gui.Name = "AdvancedExplorer"
+    gui.Name = "LiteExplorer"
     
-    -- Main frame
-    local mainFrame = Instance.new("Frame")
-    mainFrame.Name = "MainFrame"
-    mainFrame.Size = UDim2.new(0.6, 0, 0.7, 0)
-    mainFrame.Position = UDim2.new(0.2, 0, 0.15, 0)
-    mainFrame.BackgroundColor3 = COLORS.BACKGROUND
-    mainFrame.Parent = gui
+    -- Frame Principal
+    local main = Instance.new("Frame")
+    main.Name = "Main"
+    main.Size = UDim2.new(0.5, 0, 0.6, 0)
+    main.Position = UDim2.new(0.25, 0, 0.2, 0)
+    main.BackgroundColor3 = COLORS.BACKGROUND
+    main.Parent = gui
     
-    -- Title bar
+    -- Barra de Título
     local titleBar = Instance.new("Frame")
     titleBar.Size = UDim2.new(1, 0, 0, 30)
     titleBar.BackgroundColor3 = COLORS.HEADER
-    titleBar.Parent = mainFrame
+    titleBar.Parent = main
     
     local title = Instance.new("TextLabel")
-    title.Size = UDim2.new(1, 0, 1, 0)
+    title.Size = UDim2.new(1, -30, 1, 0)
     title.BackgroundTransparency = 1
-    title.Text = "Advanced Game Explorer"
+    title.Text = "Game Explorer Lite"
     title.TextColor3 = COLORS.TEXT
     title.Parent = titleBar
     
-    -- Close button
-    local closeButton = Instance.new("TextButton")
-    closeButton.Size = UDim2.new(0, 30, 0, 30)
-    closeButton.Position = UDim2.new(1, -30, 0, 0)
-    closeButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
-    closeButton.Text = "X"
-    closeButton.TextColor3 = COLORS.TEXT
-    closeButton.Parent = titleBar
+    -- Botão Fechar
+    local close = Instance.new("TextButton")
+    close.Size = UDim2.new(0, 30, 0, 30)
+    close.Position = UDim2.new(1, -30, 0, 0)
+    close.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+    close.Text = "X"
+    close.TextColor3 = COLORS.TEXT
+    close.Parent = titleBar
     
-    closeButton.MouseButton1Click:Connect(function()
+    close.MouseButton1Click:Connect(function()
         gui:Destroy()
     end)
     
-    -- File explorer section
-    local explorer = Instance.new("ScrollingFrame")
-    explorer.Size = UDim2.new(0.7, 0, 1, -30)
-    explorer.Position = UDim2.new(0, 0, 0, 30)
-    explorer.BackgroundColor3 = COLORS.BACKGROUND
-    explorer.ScrollBarThickness = 8
-    explorer.Parent = mainFrame
+    -- Lista de Itens
+    local list = Instance.new("ScrollingFrame")
+    list.Size = UDim2.new(1, 0, 1, -30)
+    list.Position = UDim2.new(0, 0, 0, 30)
+    list.BackgroundColor3 = COLORS.BACKGROUND
+    list.ScrollBarThickness = 8
+    list.Parent = main
     
-    -- Property viewer
-    local propertyViewer, propertyList = CreatePropertyViewer()
-    propertyViewer.Parent = mainFrame
+    -- Properties Frame
+    local props = Instance.new("Frame")
+    props.Size = UDim2.new(0.4, 0, 1, 0)
+    props.Position = UDim2.new(1, 10, 0, 0)
+    props.BackgroundColor3 = COLORS.BACKGROUND
+    props.Parent = main
     
-    -- Function to populate explorer
-    local function PopulateExplorer(parent, depth, yOffset)
-        local currentY = yOffset or 0
-        depth = depth or 0
-        
-        for _, item in ipairs(parent:GetChildren()) do
-            local button = CreateStyledButton(string.rep("    ", depth) .. item.Name,
-                UDim2.new(1, -10, 0, 25),
-                UDim2.new(0, 5, 0, currentY))
-            
-            button.Parent = explorer
-            
-            -- Show properties when clicked
-            button.MouseButton1Click:Connect(function()
-                DisplayProperties(item, propertyList)
-            end)
-            
-            currentY = currentY + 30
-            
-            -- Recursively add children
-            if #item:GetChildren() > 0 then
-                currentY = PopulateExplorer(item, depth + 1, currentY)
-            end
-        end
-        
-        return currentY
-    end
+    local propsTitle = Instance.new("TextLabel")
+    propsTitle.Size = UDim2.new(1, 0, 0, 30)
+    propsTitle.BackgroundColor3 = COLORS.HEADER
+    propsTitle.Text = "Properties"
+    propsTitle.TextColor3 = COLORS.TEXT
+    propsTitle.Parent = props
     
-    -- Populate initial view
-    local totalHeight = PopulateExplorer(game)
-    explorer.CanvasSize = UDim2.new(0, 0, 0, totalHeight)
+    local propsContent = Instance.new("ScrollingFrame")
+    propsContent.Size = UDim2.new(1, 0, 1, -30)
+    propsContent.Position = UDim2.new(0, 0, 0, 30)
+    propsContent.BackgroundColor3 = COLORS.BACKGROUND
+    propsContent.ScrollBarThickness = 8
+    propsContent.Parent = props
     
-    return gui
+    return gui, list, propsContent
 end
 
--- Initialize
-local function Initialize()
-    local player = Players.LocalPlayer
-    if not player then
-        player = Players.PlayerAdded:Wait()
+local function ShowProperties(instance, propsFrame)
+    propsFrame:ClearAllChildren()
+    local yPos = 0
+    
+    local function AddProperty(name, value)
+        local label = Instance.new("TextLabel")
+        label.Size = UDim2.new(1, -10, 0, 20)
+        label.Position = UDim2.new(0, 5, 0, yPos)
+        label.BackgroundTransparency = 1
+        label.Text = name .. ": " .. tostring(value)
+        label.TextColor3 = COLORS.TEXT
+        label.TextXAlignment = Enum.TextXAlignment.Left
+        label.Parent = propsFrame
+        yPos = yPos + 25
     end
     
-    local explorer = CreateExplorer()
-    explorer.Parent = player.PlayerGui
+    -- Mostrar propriedades básicas
+    AddProperty("Name", instance.Name)
+    AddProperty("ClassName", instance.ClassName)
+    if instance:IsA("BasePart") then
+        AddProperty("Position", tostring(instance.Position))
+        AddProperty("Size", tostring(instance.Size))
+    end
+    
+    propsFrame.CanvasSize = UDim2.new(0, 0, 0, yPos)
+end
+
+local function LoadItems(parent, listFrame, propsFrame, depth)
+    depth = depth or 0
+    local yPos = listFrame.CanvasSize.Y.Offset
+    local count = 0
+    
+    for _, item in ipairs(parent:GetChildren()) do
+        -- Criar botão do item
+        local button = Instance.new("TextButton")
+        button.Size = UDim2.new(1, -10, 0, 25)
+        button.Position = UDim2.new(0, 5 + depth * 20, 0, yPos)
+        button.BackgroundColor3 = COLORS.ITEM
+        button.Text = string.rep("  ", depth) .. item.Name
+        button.TextColor3 = COLORS.TEXT
+        button.TextXAlignment = Enum.TextXAlignment.Left
+        button.Parent = listFrame
+        
+        button.MouseButton1Click:Connect(function()
+            ShowProperties(item, propsFrame)
+        end)
+        
+        yPos = yPos + 30
+        count = count + 1
+        
+        -- Atualizar CanvasSize
+        listFrame.CanvasSize = UDim2.new(0, 0, 0, yPos)
+        
+        -- Controle de performance
+        if count >= MAX_ITEMS_PER_FRAME then
+            task.wait(LOAD_DELAY)
+            count = 0
+        end
+    end
+end
+
+local function Initialize()
+    local player = Players.LocalPlayer or Players.PlayerAdded:Wait()
+    
+    local gui, list, propsFrame = CreateExplorer()
+    gui.Parent = player.PlayerGui
+    
+    -- Carregar itens iniciais
+    task.spawn(function()
+        LoadItems(game.Workspace, list, propsFrame)
+    end)
 end
 
 Initialize()
