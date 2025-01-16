@@ -41,7 +41,7 @@ local Section = Tab:CreateSection("Sessão")
 local Button = Tab:CreateButton({
    Name = "Batatinha frita 1.. 2.. 3... by Rhyan57",
    Callback = function()
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Sc-Rhyan57/MsProject/refs/heads/main/projects/greenLight-RedLight-doors-by-rhyan.lua"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/kiti-sites/GRS/refs/heads/main/batatinhafrita.lua"))()
    end,
 })
 local Button = Tab:CreateButton({
