@@ -39,7 +39,7 @@ local Tab = Window:CreateTab("Mini-games", 4483362458) -- Title, Image
 local Section = Tab:CreateSection("Sessão")
 
 local Button = Tab:CreateButton({
-   Name = "Batatinha frita 1.. 2.. 3...",
+   Name = "Batatinha frita 1.. 2.. 3... by Rhyan57",
    Callback = function()
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
