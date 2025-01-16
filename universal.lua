@@ -79,4 +79,10 @@ diagonalLine2.Parent = crosshair
    end,
 })
 
+local Button = Tab:CreateButton({
+   Name = "Veja os arquivos do jogo",
+   Callback = function()
+loadstring(game:HttpGet('https://raw.githubusercontent.com/kiti-sites/GRS/refs/heads/main/explorer.lua'))()
+})
+
 Rayfield:LoadConfiguration()
