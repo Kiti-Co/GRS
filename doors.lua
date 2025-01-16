@@ -1,9 +1,10 @@
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+
 local Window = Rayfield:CreateWindow({
    Name = "Gui Roblox Scripts",
    Icon = 0, -- Icon in Topbar. Can use Lucide Icons (string) or Roblox Image (number). 0 to use no icon (default).
-   LoadingTitle = "Carregando Rayfield",
-   LoadingSubtitle = "por Sirius",
+   LoadingTitle = "Rayfield Interface Suite",
+   LoadingSubtitle = "by Sirius",
    Theme = "Default", -- Check https://docs.sirius.menu/rayfield/configuration/themes
 
    DisableRayfieldPrompts = false,
@@ -31,11 +32,16 @@ local Window = Rayfield:CreateWindow({
       GrabKeyFromSite = false, -- If this is true, set Key below to the RAW site you would like Rayfield to get the key from
       Key = {"Hello"} -- List of keys that will be accepted by the system, can be RAW file links (pastebin, github etc) or simple strings ("hello","key22")
    }
-    local Tab = Window:CreateTab("Mini-games", 4483362458) -- Title, Image
-    local Button = Tab:CreateButton({
-   Name = "Batatinha frita 1.. 2... 3....",
+})
+
+local Tab = Window:CreateTab("Mini-games", 4483362458) -- Title, Image
+
+local Section = Tab:CreateSection("Sessão")
+
+local Button = Tab:CreateButton({
+   Name = "Batatinha frita 1.. 2.. 3...",
    Callback = function()
-   local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
 local TextChatService = game:GetService("TextChatService")
 local RunService = game:GetService("RunService")
@@ -660,4 +666,5 @@ Notificar("Mod Carregado", "Passe da porta 2 para ativa-lo.", 10, Color3.new(1, 
         
    end,
 })
-})
+
+Rayfield:LoadConfiguration()
