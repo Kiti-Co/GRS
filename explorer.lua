@@ -1,83 +1,79 @@
 -- Services
 local Players = game:GetService("Players")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
--- Debug print to confirm script is running
-print("File Explorer Script Started")
-
--- Create the main GUI
-local FileExplorerGui = Instance.new("ScreenGui")
-FileExplorerGui.Name = "FileExplorerGui"
-FileExplorerGui.ResetOnSpawn = false
-
--- Check if we're in a client context
-if not game:GetService("RunService"):IsClient() then
-    warn("This script must run on the client!")
-    return
-end
-
--- Create the main frame (com cores mais visíveis para debug)
-local MainFrame = Instance.new("Frame")
-MainFrame.Name = "MainFrame"
-MainFrame.Size = UDim2.new(0, 400, 0, 300)
-MainFrame.Position = UDim2.new(0.5, -200, 0.5, -150)
-MainFrame.BackgroundColor3 = Color3.fromRGB(255, 0, 0) -- Vermelho para debug
-MainFrame.BorderSizePixel = 2
-MainFrame.Parent = FileExplorerGui
-
--- Function to populate the file explorer with debug prints
-local function PopulateFileExplorer(instance, parent, depth)
-    print("Populating files for:", instance:GetFullName())
-    for _, child in ipairs(instance:GetChildren()) do
-        print("Found child:", child.Name)
-        local entry = Instance.new("TextButton")
-        entry.Size = UDim2.new(1, -20, 0, 25)
-        entry.Position = UDim2.new(0, depth * 20, 0, #parent:GetChildren() * 25)
-        entry.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-        entry.Text = child.Name
-        entry.TextColor3 = Color3.fromRGB(255, 255, 255)
-        entry.TextXAlignment = Enum.TextXAlignment.Left
-        entry.Parent = parent
+-- Criar uma função de teste simples primeiro
+local function CreateSimpleUI()
+    -- Mensagem de início para debug
+    print("[File Explorer] Iniciando criação da UI")
+    
+    -- Criar ScreenGui básico
+    local gui = Instance.new("ScreenGui")
+    gui.Name = "FileExplorerGUI"
+    
+    -- Frame principal
+    local mainFrame = Instance.new("Frame")
+    mainFrame.Name = "MainFrame"
+    mainFrame.Size = UDim2.new(0.5, 0, 0.5, 0)  -- 50% da tela
+    mainFrame.Position = UDim2.new(0.25, 0, 0.25, 0)  -- Centralizado
+    mainFrame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    mainFrame.Parent = gui
+    
+    -- Lista de arquivos
+    local fileList = Instance.new("ScrollingFrame")
+    fileList.Name = "FileList"
+    fileList.Size = UDim2.new(0.95, 0, 0.9, 0)
+    fileList.Position = UDim2.new(0.025, 0, 0.05, 0)
+    fileList.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+    fileList.Parent = mainFrame
+    
+    -- Função para listar arquivos
+    local function ListFiles(parent, yOffset)
+        local yPos = yOffset or 0
         
-        if #child:GetChildren() > 0 then
-            PopulateFileExplorer(child, parent, depth + 1)
+        for _, item in ipairs(parent:GetChildren()) do
+            local button = Instance.new("TextButton")
+            button.Size = UDim2.new(0.95, 0, 0, 30)
+            button.Position = UDim2.new(0.025, 0, 0, yPos)
+            button.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+            button.Text = item.Name
+            button.TextColor3 = Color3.fromRGB(255, 255, 255)
+            button.TextXAlignment = Enum.TextXAlignment.Left
+            button.Parent = fileList
+            
+            -- Atualizar posição para próximo item
+            yPos = yPos + 35
         end
+        
+        -- Ajustar tamanho do ScrollingFrame
+        fileList.CanvasSize = UDim2.new(0, 0, 0, yPos)
     end
+    
+    -- Começar listagem com o Workspace
+    ListFiles(game.Workspace)
+    
+    -- Debug
+    print("[File Explorer] UI criada com sucesso")
+    
+    return gui
 end
 
--- Initialize function with debug prints
-local function InitializeExplorer()
-    print("Initializing Explorer...")
+-- Função principal
+local function Initialize()
     local player = Players.LocalPlayer
     if not player then
-        warn("No LocalPlayer found!")
-        return
+        print("[File Explorer] Esperando pelo jogador...")
+        Players.PlayerAdded:Wait()
+        player = Players.LocalPlayer
     end
     
-    print("Creating GUI for player:", player.Name)
-    local gui = FileExplorerGui:Clone()
-    gui.Parent = player.PlayerGui
+    print("[File Explorer] Inicializando para: " .. player.Name)
     
-    -- Create a simple scroll frame
-    local ScrollFrame = Instance.new("ScrollingFrame")
-    ScrollFrame.Size = UDim2.new(1, -20, 1, -40)
-    ScrollFrame.Position = UDim2.new(0, 10, 0, 35)
-    ScrollFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-    ScrollFrame.Parent = gui.MainFrame
+    -- Criar e mostrar UI
+    local ui = CreateSimpleUI()
+    ui.Parent = player.PlayerGui
     
-    print("Starting file population...")
-    PopulateFileExplorer(game, ScrollFrame, 0)
-    print("File population completed")
+    print("[File Explorer] Interface criada com sucesso!")
 end
 
--- Wait for player to load
-Players.PlayerAdded:Connect(function(player)
-    print("Player added:", player.Name)
-    InitializeExplorer()
-end)
-
--- Handle existing players
-if Players.LocalPlayer then
-    print("Local player already exists:", Players.LocalPlayer.Name)
-    InitializeExplorer()
-end
+-- Iniciar o script
+Initialize()
