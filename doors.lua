@@ -92,7 +92,7 @@ local Button = Tab:CreateButton({
 
 -- Button: Game Explorer
 local Button = Tab:CreateButton({
-   Name = "Veja os arquivos do jogo",
+   Name = "Veja os arquivos do jogo (CAUSA LAG &/OU CRASH)",
    Callback = function()
       loadstring(game:HttpGet('https://raw.githubusercontent.com/kiti-sites/GRS/refs/heads/main/explorer.lua'))()
    end,
