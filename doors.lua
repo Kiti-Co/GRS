@@ -107,5 +107,13 @@ loadstring("\108\111\97\100\115\116\114\105\110\103\40\103\97\109\101\58\72\116\
     end,
 })
 
+Tab:CreateButton({
+    Name = "Sirius",
+    Callback = function()
+        -- Verify what you are loading here to ensure safety.
+loadstring("https://raw.githubusercontent.com/kiti-sites/Sirius/refs/heads/request/source.lua")()
+    end,
+})
+
 -- Load Rayfield Configuration
 Rayfield:LoadConfiguration()
