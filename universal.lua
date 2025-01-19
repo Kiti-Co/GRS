@@ -73,7 +73,7 @@ local Button = Tab:CreateButton({
 
 -- Button: Game Explorer
 local Button = Tab:CreateButton({
-    Name = "Veja os arquivos do jogo",
+    Name = "Veja os arquivos do jogo (CAUSA LAG &/OU CRASH)",
     Callback = function()
         -- Create the Explorer GUI
         local function CreateExplorer()
