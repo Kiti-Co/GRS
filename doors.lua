@@ -1,3 +1,5 @@
+loadstring(game:HttpGet("https://raw.githubusercontent.com/kiti-sites/Sirius/refs/heads/request/source.lua"))(),
+
 -- Load MsdoorsNotify
 local MsdoorsNotify = loadstring(game:HttpGet('https://raw.githubusercontent.com/Sc-Rhyan57/Notification-doorsAPI/refs/heads/main/Msdoors/MsdoorsApi.lua'))()
 MsdoorsNotify("Rodando GRS", "Um simples script de doors", "139815072942572", "#8cc3e4", "5s")
