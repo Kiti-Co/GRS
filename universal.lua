@@ -167,13 +167,6 @@ Tab:CreateButton({
     end,
 })
 
--- Button: Sirius
-Tab:CreateButton({
-    Name = "Sirius",
-    Callback = function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/kiti-sites/Sirius/refs/heads/request/source.lua"))()
-    end,
-})
 
 -- Load Rayfield Configuration
 Rayfield:LoadConfiguration()
