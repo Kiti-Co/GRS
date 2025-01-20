@@ -1,4 +1,4 @@
-loadstring(game:HttpGet("https://raw.githubusercontent.com/kiti-sites/Sirius/refs/heads/request/source.lua"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/kiti-sites/Sirius/refs/heads/request/source.lua"))(),
 
 -- Load Rayfield
 local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/kiti-sites/GRS/refs/heads/main/rayfield.lua'))()
