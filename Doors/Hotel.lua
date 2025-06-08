@@ -40,7 +40,7 @@ local Section = Tab:CreateSection("Sessão")
 Tab:CreateButton({
    Name = "Batatinha frita 1.. 2.. 3... by Rhyan57",
    Callback = function()
-      loadstring(game:HttpGet("https://raw.githubusercontent.com/kiti-sites/GRS/refs/heads/main/batatinhafrita.lua"))()
+      loadstring(game:HttpGet("https://raw.githubusercontent.com/kiti-sites/GRS/refs/heads/main/Doors/batatinhafrita.lua"))()
    end,
 })
 
@@ -48,7 +48,7 @@ Tab:CreateButton({
 Tab:CreateButton({
    Name = "Permitir pulo",
    Callback = function()
-      loadstring(game:HttpGet("https://raw.githubusercontent.com/kiti-sites/GRS/refs/heads/main/pulardoors.lua"))()
+      loadstring(game:HttpGet("https://raw.githubusercontent.com/kiti-sites/GRS/refs/heads/main/Doors/pulardoors.lua"))()
    end,
 })
 
