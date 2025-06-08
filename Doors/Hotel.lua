@@ -1,11 +1,11 @@
-loadstring(game:HttpGet("https://raw.githubusercontent.com/kiti-sites/Sirius/refs/heads/request/source.lua"))(),
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Kiti-Co/Sirius/refs/heads/request/source.lua"))(),
 
 -- Load MsdoorsNotify
 local MsdoorsNotify = loadstring(game:HttpGet('https://raw.githubusercontent.com/Sc-Rhyan57/Notification-doorsAPI/refs/heads/main/Msdoors/MsdoorsApi.lua'))()
 MsdoorsNotify("Rodando GRS", "Um simples script de doors", "139815072942572", "#8cc3e4", "5s")
 
 -- Load Rayfield Library
-local Rayfield = loadstring(game:HttpGet("https://raw.githubusercontent.com/kiti-sites/GRS/refs/heads/main/rayfield.lua"))()
+local Rayfield = loadstring(game:HttpGet("https://raw.githubusercontent.com/Kiti-Co/GRS/refs/heads/main/rayfield.lua"))()
 
 -- Create Rayfield Window
 local Window = Rayfield:CreateWindow({
@@ -40,7 +40,7 @@ local Section = Tab:CreateSection("Sessão")
 Tab:CreateButton({
    Name = "Batatinha frita 1.. 2.. 3... by Rhyan57",
    Callback = function()
-      loadstring(game:HttpGet("https://raw.githubusercontent.com/kiti-sites/GRS/refs/heads/main/Doors/batatinhafrita.lua"))()
+      loadstring(game:HttpGet("https://raw.githubusercontent.com/Kiti-Co/GRS/refs/heads/main/Doors/batatinhafrita.lua"))()
    end,
 })
 
@@ -48,7 +48,7 @@ Tab:CreateButton({
 Tab:CreateButton({
    Name = "Permitir pulo",
    Callback = function()
-      loadstring(game:HttpGet("https://raw.githubusercontent.com/kiti-sites/GRS/refs/heads/main/Doors/pulardoors.lua"))()
+      loadstring(game:HttpGet("https://raw.githubusercontent.com/Kiti-Co/GRS/refs/heads/main/Doors/pulardoors.lua"))()
    end,
 })
 
@@ -101,7 +101,7 @@ Tab:CreateButton({
 Tab:CreateButton({
    Name = "Veja os arquivos do jogo (CAUSA LAG &/OU CRASH)",
    Callback = function()
-      loadstring(game:HttpGet('https://raw.githubusercontent.com/kiti-sites/GRS/refs/heads/main/explorer.lua'))()
+      loadstring(game:HttpGet('https://raw.githubusercontent.com/Kiti-Co/GRS/refs/heads/main/explorer.lua'))()
    end,
 })
 
