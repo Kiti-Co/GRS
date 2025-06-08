@@ -1,56 +1,52 @@
-loadstring(game:HttpGet("https://raw.githubusercontent.com/kiti-sites/Sirius/refs/heads/request/source.lua"))(),
+-- Carrega a biblioteca Sirius
+loadstring(game:HttpGet("https://raw.githubusercontent.com/kiti-sites/Sirius/refs/heads/request/source.lua"))()
 
--- Load Rayfield
-local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/kiti-sites/GRS/refs/heads/main/rayfield.lua'))()
+-- Carrega Rayfield
+local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/Kiti-Co/Rayfield/refs/heads/main/source.lua'))()
 
+-- Janela principal
 local Window = Rayfield:CreateWindow({
     Name = "Gui Roblox Scripts",
-    Icon = 0, -- Icon in Topbar. Use Lucide Icons (string) or Roblox Image (number). 0 means no icon.
+    Icon = 0,
     LoadingTitle = "Gui Roblox Scripts",
     LoadingSubtitle = "by Rfonte",
-    Theme = "Default", -- Check themes at https://docs.sirius.menu/rayfield/configuration/themes
+    Theme = "Default",
     DisableRayfieldPrompts = false,
     DisableBuildWarnings = false,
-
     ConfigurationSaving = {
         Enabled = true,
-        FolderName = nil, -- If not provided, it defaults to the game name.
+        FolderName = nil,
         FileName = "GRS"
     },
-
     Discord = {
         Enabled = false,
         Invite = "noinvitelink",
         RememberJoins = true
     },
-
     KeySystem = false
 })
 
--- Create "Universal" Tab
-local Tab = Window:CreateTab("Universal", 4483362458) -- 4483362458 is an example icon asset ID.
-
--- Create Section
+-- Aba "Universal"
+local Tab = Window:CreateTab("Universal", 4483362458)
 local Section = Tab:CreateSection("Sessão")
 
--- Button: Crosshair
+-- Botão: Mira
 Tab:CreateButton({
     Name = "Mira",
     Callback = function()
         local player = game.Players.LocalPlayer
         local playerGui = player:FindFirstChild("PlayerGui") or player:WaitForChild("PlayerGui")
 
-        -- Check if Crosshair already exists
+        -- Remove se já existir
         if playerGui:FindFirstChild("CrosshairGUI") then
             playerGui.CrosshairGUI:Destroy()
         end
 
-        -- Create a ScreenGui for the crosshair
+        -- Criar GUI da mira
         local screenGui = Instance.new("ScreenGui")
         screenGui.Name = "CrosshairGUI"
         screenGui.Parent = playerGui
 
-        -- Create the crosshair frame
         local crosshair = Instance.new("Frame")
         crosshair.Size = UDim2.new(0, 30, 0, 30)
         crosshair.AnchorPoint = Vector2.new(0.5, 0.5)
@@ -58,27 +54,19 @@ Tab:CreateButton({
         crosshair.Position = UDim2.new(0.5, 0, 0.5, 0)
         crosshair.Parent = screenGui
 
-        -- Create diagonal line 1
-        local diagonalLine1 = Instance.new("Frame")
-        diagonalLine1.Size = UDim2.new(0, 15, 0, 2)
-        diagonalLine1.AnchorPoint = Vector2.new(0.5, 0.5)
-        diagonalLine1.Position = UDim2.new(0.5, 0, 0.5, 0)
-        diagonalLine1.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
-        diagonalLine1.Rotation = 45
-        diagonalLine1.Parent = crosshair
-
-        -- Create diagonal line 2
-        local diagonalLine2 = Instance.new("Frame")
-        diagonalLine2.Size = UDim2.new(0, 15, 0, 2)
-        diagonalLine2.AnchorPoint = Vector2.new(0.5, 0.5)
-        diagonalLine2.Position = UDim2.new(0.5, 0, 0.5, 0)
-        diagonalLine2.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
-        diagonalLine2.Rotation = -45
-        diagonalLine2.Parent = crosshair
+        for _, angle in ipairs({45, -45}) do
+            local line = Instance.new("Frame")
+            line.Size = UDim2.new(0, 15, 0, 2)
+            line.AnchorPoint = Vector2.new(0.5, 0.5)
+            line.Position = UDim2.new(0.5, 0, 0.5, 0)
+            line.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+            line.Rotation = angle
+            line.Parent = crosshair
+        end
     end,
 })
 
--- Button: Game Explorer
+-- Botão: Explorador de arquivos
 Tab:CreateButton({
     Name = "Veja os arquivos do jogo (CAUSA LAG &/OU CRASH)",
     Callback = function()
@@ -86,31 +74,23 @@ Tab:CreateButton({
             local player = game.Players.LocalPlayer
             local playerGui = player:FindFirstChild("PlayerGui") or player:WaitForChild("PlayerGui")
 
-            -- Check if Explorer already exists
             if playerGui:FindFirstChild("AdvancedExplorer") then
                 playerGui.AdvancedExplorer:Destroy()
             end
 
-            -- Create the Explorer GUI
-            local gui = Instance.new("ScreenGui")
+            local gui = Instance.new("ScreenGui", playerGui)
             gui.Name = "AdvancedExplorer"
-            gui.Parent = playerGui
 
-            -- Main Frame
-            local mainFrame = Instance.new("Frame")
-            mainFrame.Name = "MainFrame"
+            local mainFrame = Instance.new("Frame", gui)
             mainFrame.Size = UDim2.new(0.6, 0, 0.7, 0)
             mainFrame.Position = UDim2.new(0.2, 0, 0.15, 0)
             mainFrame.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
-            mainFrame.Parent = gui
 
-            -- Title Bar
-            local titleBar = Instance.new("Frame")
+            local titleBar = Instance.new("Frame", mainFrame)
             titleBar.Size = UDim2.new(1, 0, 0, 30)
             titleBar.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
-            titleBar.Parent = mainFrame
 
-            local title = Instance.new("TextLabel")
+            local title = Instance.new("TextLabel", titleBar)
             title.Size = UDim2.new(1, -30, 1, 0)
             title.BackgroundTransparency = 1
             title.Text = "  Game Explorer"
@@ -118,34 +98,28 @@ Tab:CreateButton({
             title.TextXAlignment = Enum.TextXAlignment.Left
             title.Font = Enum.Font.GothamBold
             title.TextSize = 14
-            title.Parent = titleBar
 
-            -- Content Frame
-            local contentFrame = Instance.new("ScrollingFrame")
+            local contentFrame = Instance.new("ScrollingFrame", mainFrame)
             contentFrame.Size = UDim2.new(1, 0, 1, -30)
             contentFrame.Position = UDim2.new(0, 0, 0, 30)
             contentFrame.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
             contentFrame.ScrollBarThickness = 8
-            contentFrame.Parent = mainFrame
 
-            -- Populate Explorer
             local function PopulateExplorer(parent, depth)
                 depth = depth or 0
                 local yOffset = 0
 
                 for _, item in ipairs(parent:GetChildren()) do
-                    local button = Instance.new("TextButton")
+                    local button = Instance.new("TextButton", contentFrame)
                     button.Size = UDim2.new(1, -10, 0, 25)
                     button.Position = UDim2.new(0, 5, 0, yOffset)
                     button.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
                     button.TextColor3 = Color3.fromRGB(255, 255, 255)
                     button.Text = string.rep("    ", depth) .. item.Name
-                    button.Parent = contentFrame
-
-                    yOffset = yOffset + 30
+                    yOffset += 30
 
                     if #item:GetChildren() > 0 then
-                        yOffset = PopulateExplorer(item, depth + 1) + yOffset
+                        yOffset += PopulateExplorer(item, depth + 1)
                     end
                 end
 
@@ -159,14 +133,14 @@ Tab:CreateButton({
     end,
 })
 
--- Button: Fly
+-- Botão: Voo (precisa de implementação segura)
 Tab:CreateButton({
-    Name = "Voe (PODE CAUSAR BANIMENTO EM ALGUNS JOGOS OU NO ROBLOX)",
+    Name = "Infinity Yield",
     Callback = function()
-        print("Fly functionality placeholder. Verify fly script for safety!")
+        warn("Função de voo precisa ser implementada com cuidado. Evite usar em jogos com anti-cheat.")
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()
     end,
 })
 
-
--- Load Rayfield Configuration
+-- Carrega Configuração
 Rayfield:LoadConfiguration()
